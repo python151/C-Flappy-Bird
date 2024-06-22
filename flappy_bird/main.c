@@ -26,11 +26,16 @@ int main (int argc, char **argv)
             if (event.type == SDL_QUIT) {
                 running = false;
             }
+
+            // Update game state
+            for (int i = 0; i < GAME_OBJECTS; i++) {
+                objects[i].update(&(objects[i]), &event);
+            }
         }
 
         // Update game state
         for (int i = 0; i < GAME_OBJECTS; i++) {
-            objects[i].update(&(objects[i]));
+            objects[i].update(&(objects[i]), NULL);
         }
 
         // Render

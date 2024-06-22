@@ -1,7 +1,10 @@
 #include "./constants_and_includes.h"
 
-void move_right(GameObject* object) {
-    object->rect.x += 1;
+void move_right(GameObject* object, SDL_Event* event) {
+    if (event == NULL)
+        object->rect.x += 1;
+    else if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_SPACE) 
+        object->rect.x -= 20;
 }
 
 GameObject* initialize_game_objects(SDL_Renderer* renderer) {
