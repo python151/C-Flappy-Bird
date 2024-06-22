@@ -1,73 +1,47 @@
-#include <stdio.h> /* printf and fprintf */
+#include "constants_and_includes.h"
 
-#ifdef _WIN32
-#include <SDL/SDL.h> /* Windows-specific SDL2 library */
-#else
-#include <SDL2/SDL.h> /* macOS- and GNU/Linux-specific */
-#endif
-
-/* Sets constants */
-#define WIDTH 800
-#define HEIGHT 600
-#define DELAY 3000
+#include "./renderer.c"
+#include "./GameObject.c"
+#include "./objects.c"
 
 int main (int argc, char **argv)
 {
     /* Initialises data */
-    SDL_Window *window = NULL;
+    SDL_Window *window = create_window();
+    SDL_Renderer *renderer = create_renderer(window);
     
-    /*
-    * Initialises the SDL video subsystem (as well as the events subsystem).
-    * Returns 0 on success or a negative error code on failure using SDL_GetError().
-    */
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        fprintf(stderr, "SDL failed to initialise: %s\n", SDL_GetError());
-        return 1;
-    }
-
-    /* Creates a SDL window */
-    window = SDL_CreateWindow("SDL Example", /* Title of the SDL window */
-                    SDL_WINDOWPOS_UNDEFINED, /* Position x of the window */
-                    SDL_WINDOWPOS_UNDEFINED, /* Position y of the window */
-                    WIDTH, /* Width of the window in pixels */
-                    HEIGHT, /* Height of the window in pixels */
-                    0); /* Additional flag(s) */
-
-    /* Checks if window has been created; if not, exits program */
-    if (window == NULL) {
-        fprintf(stderr, "SDL window failed to initialise: %s\n", SDL_GetError());
-        return 1;
-    }
-
-    // Setup renderer
-    SDL_Renderer* renderer = NULL;
-    renderer =  SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED);
 
     // Set render color to red ( background will be rendered in this color )
     SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
 
-    // Clear winow
-    SDL_RenderClear( renderer );
-
-    // Creat a rect at pos ( 50, 50 ) that's 50 pixels wide and 50 pixels high.
-    SDL_Rect r;
-    r.x = 0;
-    r.y = HEIGHT-50;
-    r.w = 50;
-    r.h = 50;
-
-    // Set render color to blue ( rect will be rendered in this color )
-    SDL_SetRenderDrawColor( renderer, 0, 0, 255, 255 );
-
-    // Render rect
-    SDL_RenderFillRect( renderer, &r );
-
-    // Render the rect to the screen
-    SDL_RenderPresent(renderer);
+    GameObject* objects = initialize_game_objects(renderer);
 
 
-    /* Pauses all SDL subsystems for a variable amount of milliseconds */
-    SDL_Delay(DELAY);
+    bool running = true;
+    SDL_Event event;
+    
+    while (running) {
+        // Handle events
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                running = false;
+            }
+        }
+
+        // Update game state
+        for (int i = 0; i < GAME_OBJECTS; i++) {
+            objects[i].update(&(objects[i]));
+        }
+
+        // Render
+        SDL_RenderClear(renderer);
+        for (int i = 0; i < GAME_OBJECTS; i++) {
+            SDL_RenderCopy(renderer, objects[i].texture, NULL, &objects[i].rect);
+        }
+        SDL_RenderPresent(renderer);
+
+        SDL_Delay(16); // Delay to cap frame rate (approx 60 FPS)
+    }
 
     /* Frees memory */
     SDL_DestroyWindow(window);
