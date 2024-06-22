@@ -14,7 +14,7 @@ SDL_Window* create_window() {
     }
 
     /* Creates a SDL window */
-    window = SDL_CreateWindow("SDL Example", /* Title of the SDL window */
+    window = SDL_CreateWindow("Flappy Bird!", /* Title of the SDL window */
                     SDL_WINDOWPOS_UNDEFINED, /* Position x of the window */
                     SDL_WINDOWPOS_UNDEFINED, /* Position y of the window */
                     WIDTH, /* Width of the window in pixels */

@@ -38,6 +38,17 @@ int main (int argc, char **argv)
             objects[i].update(&(objects[i]), NULL);
         }
 
+        // Check for collisions
+        for (int i = 0; i < GAME_OBJECTS; i++) {
+            for (int j = i + 1; j < GAME_OBJECTS; j++) {
+                if (SDL_HasIntersection(&(objects[i].rect), &(objects[j].rect))) {
+                    objects[i].handle_collision(&(objects[i]),&(objects[j]));
+                    objects[j].handle_collision(&(objects[j]), &(objects[i]));
+                }
+            }
+        }
+
+
         // Render
         SDL_RenderClear(renderer);
         for (int i = 0; i < GAME_OBJECTS; i++) {
