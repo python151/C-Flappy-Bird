@@ -14,13 +14,19 @@ int main (int argc, char **argv)
     // Set render color to red ( background will be rendered in this color )
     SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
 
+
+    // NOTE: When dealing with more dynamic games, further optimization is required
     GameObject* objects = initialize_game_objects(renderer);
 
 
     bool running = true;
     SDL_Event event;
-    
+    Uint32 frameStart;
+    int frameTime;
+
     while (running) {
+        frameStart = SDL_GetTicks();
+
         // Handle events
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
@@ -39,6 +45,7 @@ int main (int argc, char **argv)
         }
 
         // Check for collisions
+        // NOTE: When working with larger amounts of objects, this must be optimized.
         for (int i = 0; i < GAME_OBJECTS; i++) {
             for (int j = i + 1; j < GAME_OBJECTS; j++) {
                 if (SDL_HasIntersection(&(objects[i].rect), &(objects[j].rect))) {
@@ -48,7 +55,6 @@ int main (int argc, char **argv)
             }
         }
 
-
         // Render
         SDL_RenderClear(renderer);
         for (int i = 0; i < GAME_OBJECTS; i++) {
@@ -56,7 +62,12 @@ int main (int argc, char **argv)
         }
         SDL_RenderPresent(renderer);
 
-        SDL_Delay(16); // Delay to cap frame rate (approx 60 FPS)
+        frameTime = SDL_GetTicks() - frameStart;
+
+        // If frame finished early, delay to maintain the target frame rate
+        if (FRAME_DELAY > frameTime) {
+            SDL_Delay(FRAME_DELAY - frameTime);
+        }
     }
 
     /* Frees memory */

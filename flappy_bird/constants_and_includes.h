@@ -13,7 +13,10 @@
 /* Sets constants */
 #define WIDTH 800
 #define HEIGHT 600
-#define DELAY 300
 #define GAME_OBJECTS 2
+#define PIXEL_PER_METER 1
+#define FPS 60
+#define FRAME_DELAY (1000 / FPS)
+#define GRAVITY (PIXEL_PER_METER * 9.8 / FPS)
 
 #endif
