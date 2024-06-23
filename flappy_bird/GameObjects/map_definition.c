@@ -73,7 +73,6 @@ void pipe_breaker_collide(GameObject* self, GameObject* other, GameState* state)
     }
 
     // Update pipe parameters to create the "infinite map" effect
-    // TODO: Shift pipe locations over by 1
     int new_x = state->pipe_locations[NUMBER_OF_PIPES-1];
 
     int h_min = MINIMUM_PIPE_LENGTH;
@@ -107,7 +106,7 @@ GameObject* create_map(SDL_Renderer* renderer, GameState* state) {
 
     // initalizes pipe breaker
     SDL_Texture *breaker_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 50, 50);
-    SDL_Rect breaker_rect = {.x = -20-PIPE_WIDTH, .y = 0, .w = 10, .h = HEIGHT};
+    SDL_Rect breaker_rect = {.x = -10-PIPE_WIDTH, .y = 0, .w = 10, .h = HEIGHT};
     map_objects[2*NUMBER_OF_PIPES].rect = breaker_rect;
     map_objects[2*NUMBER_OF_PIPES].texture = breaker_texture;
     map_objects[2*NUMBER_OF_PIPES].update = &do_nothing;
@@ -115,6 +114,19 @@ GameObject* create_map(SDL_Renderer* renderer, GameState* state) {
 
     
     // initializes boundary box
+    SDL_Texture *top_box_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 50, 50);
+    SDL_Rect top_box_rect = {.x = 0, .y = 0, .w = WIDTH, .h = 10};
+    map_objects[2*NUMBER_OF_PIPES+1].rect = top_box_rect;
+    map_objects[2*NUMBER_OF_PIPES+1].texture = top_box_texture;
+    map_objects[2*NUMBER_OF_PIPES+1].update = &do_nothing;
+    map_objects[2*NUMBER_OF_PIPES+1].handle_collision = &do_nothing;
+
+    SDL_Texture *bottom_box_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 50, 50);
+    SDL_Rect bottom_box_rect = {.x = 0, .y = HEIGHT-10, .w = WIDTH, .h = 10};
+    map_objects[2*NUMBER_OF_PIPES+2].rect = bottom_box_rect;
+    map_objects[2*NUMBER_OF_PIPES+2].texture = bottom_box_texture;
+    map_objects[2*NUMBER_OF_PIPES+2].update = &do_nothing;
+    map_objects[2*NUMBER_OF_PIPES+2].handle_collision = &do_nothing;
 
     return map_objects;
 }
