@@ -1,4 +1,4 @@
-#include "./constants_and_includes.h"
+#include "../constants_and_includes.h"
 
 void bird_collide(GameObject* self, GameObject* other) {
     self->rect.x = 0;

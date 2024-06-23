@@ -1,4 +1,4 @@
-#include "./constants_and_includes.h"
+#include "../constants_and_includes.h"
 #include "./bird_definition.c"
 #include "./map_definition.c"
 

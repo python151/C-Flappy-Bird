@@ -2,7 +2,7 @@
 
 #include "./renderer.c"
 #include "./GameObject.c"
-#include "./objects.c"
+#include "./GameObjects/objects.c"
 
 int main (int argc, char **argv)
 {
