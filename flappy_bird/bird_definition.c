@@ -6,11 +6,18 @@ void bird_collide(GameObject* self, GameObject* other) {
 }
 
 void bird_update(GameObject* self, SDL_Event* event) {
+    GameObject* bird = (GameObject*)self;
+    BirdData* birdData = (BirdData*)bird->special_ptr;
+
     if (event == NULL) {
-        self->velocity_y += GRAVITY;
-        self->rect.y += self->velocity_y;
+        birdData->velocity_y += GRAVITY;
+        if (birdData->velocity_y > MAX_BIRD_VELOCITY_Y)
+            birdData->velocity_y = MAX_BIRD_VELOCITY_Y;
+        if (birdData->velocity_y < -MAX_BIRD_VELOCITY_Y)
+            birdData->velocity_y = -MAX_BIRD_VELOCITY_Y;
+        self->rect.y += birdData->velocity_y;
     } else if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_SPACE) {
-        self->velocity_y -= 6;
+        birdData->velocity_y -= 6;
     }
 }
 
@@ -28,4 +35,7 @@ GameObject* create_bird(SDL_Renderer* renderer) {
     object1->texture = texture;
     object1->update = &bird_update;
     object1->handle_collision = &bird_collide;
+    object1->special_ptr = malloc(sizeof(BirdData));
+
+    return object1;
 }

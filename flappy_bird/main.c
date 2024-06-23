@@ -81,6 +81,7 @@ int main (int argc, char **argv)
 
     /* Frees memory */
     SDL_DestroyWindow(window);
+    free(objects);
     
     /* Shuts down all SDL subsystems */
     SDL_Quit(); 

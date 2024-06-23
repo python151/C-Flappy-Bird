@@ -3,6 +3,15 @@ typedef struct {
     SDL_Texture* texture;
     void (*update)(void*, void*);
     void (*handle_collision)(void*, void*);
-    float velocity_x;
-    float velocity_y;
+    void *special_ptr;
 } GameObject;
+
+typedef struct {
+    double velocity_x;
+    double velocity_y;
+} BirdData;
+
+typedef struct {
+    GameObject* other_pipe;
+    bool is_top;
+} PipeData;
