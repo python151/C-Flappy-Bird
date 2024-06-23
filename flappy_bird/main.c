@@ -16,7 +16,8 @@ int main (int argc, char **argv)
 
 
     // NOTE: When dealing with more dynamic games, further optimization is required
-    GameObject* objects = initialize_game_objects(renderer);
+    GameState* state = malloc(sizeof(GameState));
+    GameObject* objects = initialize_game_objects(renderer, state);
     puts("Game objects initialized...");
 
 
@@ -41,7 +42,7 @@ int main (int argc, char **argv)
             // Update game state
             for (int i = 0; i < GAME_OBJECTS; i++) {
                 printf("Updating game state on event for object #%d...\n", i);
-                objects[i].update(&(objects[i]), &event);
+                objects[i].update(&(objects[i]), &event, state);
                 printf("Updating game state on event for object #%d... done\n", i);
             }
         }
@@ -50,7 +51,7 @@ int main (int argc, char **argv)
         // Update game state
         for (int i = 0; i < GAME_OBJECTS; i++) {
             printf("Updating game state for object #%d...\n", i);
-            objects[i].update(&(objects[i]), NULL);
+            objects[i].update(&(objects[i]), NULL, state);
         }
 
         // Check for collisions
@@ -58,8 +59,8 @@ int main (int argc, char **argv)
         for (int i = 0; i < GAME_OBJECTS; i++) {
             for (int j = i + 1; j < GAME_OBJECTS; j++) {
                 if (SDL_HasIntersection(&(objects[i].rect), &(objects[j].rect))) {
-                    objects[i].handle_collision(&(objects[i]),&(objects[j]));
-                    objects[j].handle_collision(&(objects[j]), &(objects[i]));
+                    objects[i].handle_collision(&(objects[i]),&(objects[j]), state);
+                    objects[j].handle_collision(&(objects[j]), &(objects[i]), state);
                 }
             }
         }
@@ -81,6 +82,7 @@ int main (int argc, char **argv)
 
     /* Frees memory */
     SDL_DestroyWindow(window);
+    free(state);
     free(objects);
     
     /* Shuts down all SDL subsystems */

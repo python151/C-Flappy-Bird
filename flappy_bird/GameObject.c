@@ -1,8 +1,8 @@
 typedef struct {
     SDL_Rect rect;
     SDL_Texture* texture;
-    void (*update)(void*, void*);
-    void (*handle_collision)(void*, void*);
+    void (*update)(void*, void*, void*);
+    void (*handle_collision)(void*, void*, void*);
     void *special_ptr;
 } GameObject;
 

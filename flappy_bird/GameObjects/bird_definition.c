@@ -1,11 +1,11 @@
 #include "../constants_and_includes.h"
 
-void bird_collide(GameObject* self, GameObject* other) {
+void bird_collide(GameObject* self, GameObject* other, GameState* state) {
     self->rect.x = 0;
     self->rect.y = (HEIGHT/2) - 25;
 }
 
-void bird_update(GameObject* self, SDL_Event* event) {
+void bird_update(GameObject* self, SDL_Event* event, GameState* state) {
     GameObject* bird = (GameObject*)self;
     BirdData* birdData = (BirdData*)bird->special_ptr;
 

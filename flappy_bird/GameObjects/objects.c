@@ -3,7 +3,7 @@
 #include "./map_definition.c"
 
 
-GameObject* initialize_game_objects(SDL_Renderer* renderer) {
+GameObject* initialize_game_objects(SDL_Renderer* renderer, GameState* state) {
     GameObject* bird = create_bird(renderer);
     
     GameObject* objects = malloc(GAME_OBJECTS*sizeof(GameObject));
@@ -11,7 +11,7 @@ GameObject* initialize_game_objects(SDL_Renderer* renderer) {
     free(bird);
     
     puts("creating map...");
-    GameObject* map_objects = create_map(renderer);
+    GameObject* map_objects = create_map(renderer, state);
     puts("map created...");
     for (int i = 1; i < GAME_OBJECTS; i++) {
         printf("assigning map object #%d...\n", i);

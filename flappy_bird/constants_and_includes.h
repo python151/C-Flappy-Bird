@@ -28,4 +28,6 @@
 #define MIN_PIPE_TO_PIPE_DISTANCE 200
 #define MAX_BIRD_VELOCITY_Y 20
 
+#include "./GameState/gamestate.c"
+
 #endif
