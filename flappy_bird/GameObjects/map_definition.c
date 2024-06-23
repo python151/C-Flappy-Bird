@@ -15,8 +15,18 @@ GameObject* create_pipe_at_x(int x, SDL_Renderer* renderer) {
     SDL_Texture *texture_top = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 50, 50);
     SDL_Texture *texture_bottom = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 50, 50);
 
+    if (texture_top == NULL || texture_bottom == NULL)
+        exit(1);
+
     int h_min = MINIMUM_PIPE_LENGTH;
-    int h_max = HEIGHT - MINIMUM_PIPE_LENGTH - PIPE_GAP; // Set the bottom_pipe height to MINIMUM_PIPE_LENGTH and solve to get this
+    int h_max = HEIGHT - MINIMUM_PIPE_LENGTH - PIPE_GAP;
+
+    // Ensure h_max is at least h_min to avoid invalid range for rand()
+    if (h_max < h_min) {
+        exit(1);
+        h_max = h_min;
+    }
+
     int top_height = h_min + rand() % (h_max - h_min + 1);
 
     SDL_Rect r_top;
@@ -24,13 +34,13 @@ GameObject* create_pipe_at_x(int x, SDL_Renderer* renderer) {
     r_top.h = top_height;
     r_top.y = 0;
     r_top.w = PIPE_WIDTH;
-    
 
     SDL_Rect r_bottom;
     r_bottom.x = x;
     r_bottom.h = HEIGHT - r_top.h - PIPE_GAP;
     r_bottom.y = HEIGHT - r_bottom.h;
     r_bottom.w = PIPE_WIDTH;
+
     
 
     GameObject* objects = malloc(2*sizeof(GameObject));
@@ -72,21 +82,15 @@ void pipe_breaker_collide(GameObject* self, GameObject* other, GameState* state)
         top_pipe = other_pipe_data->other_pipe;
     }
 
-    // Update pipe parameters to create the "infinite map" effect
+    // Update pipe to create the "infinite map" effect
     int new_x = state->pipe_locations[NUMBER_OF_PIPES-1];
-
-    int h_min = MINIMUM_PIPE_LENGTH;
-    int h_max = HEIGHT - MINIMUM_PIPE_LENGTH - PIPE_GAP; // Set the bottom_pipe height to MINIMUM_PIPE_LENGTH and solve to get this
-    int top_height = h_min + rand() % (h_max - h_min + 1);
-
     top_pipe->rect.x = new_x;
-    top_pipe->rect.h = top_height;
     bottom_pipe->rect.x = new_x;
-    bottom_pipe->rect.h = (HEIGHT - top_height) - PIPE_GAP;
-    bottom_pipe->rect.y = HEIGHT - bottom_pipe->rect.h;
 }
 
 GameObject* create_map(SDL_Renderer* renderer, GameState* state) {
+    state->renderer = renderer;
+
     GameObject* map_objects = malloc((GAME_OBJECTS-1)*sizeof(GameObject));
 
     // initializes all our pipes
@@ -113,7 +117,7 @@ GameObject* create_map(SDL_Renderer* renderer, GameState* state) {
     map_objects[2*NUMBER_OF_PIPES].handle_collision = &pipe_breaker_collide;
 
     
-    // initializes boundary box
+    // initializes boundary boxes
     SDL_Texture *top_box_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 50, 50);
     SDL_Rect top_box_rect = {.x = 0, .y = 0, .w = WIDTH, .h = 10};
     map_objects[2*NUMBER_OF_PIPES+1].rect = top_box_rect;
