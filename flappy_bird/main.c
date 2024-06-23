@@ -12,11 +12,12 @@ int main (int argc, char **argv)
     
 
     // Set render color to red ( background will be rendered in this color )
-    SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
+    SDL_SetRenderDrawColor( renderer, 255, 255, 255, 0 );
 
 
     // NOTE: When dealing with more dynamic games, further optimization is required
     GameObject* objects = initialize_game_objects(renderer);
+    puts("Game objects initialized...");
 
 
     bool running = true;
@@ -24,9 +25,13 @@ int main (int argc, char **argv)
     Uint32 frameStart;
     int frameTime;
 
+    puts("Starting game loop...");
     while (running) {
+        puts("Getting ticks...");
         frameStart = SDL_GetTicks();
+        puts("Getting ticks... done");
 
+        puts("Handling events...");
         // Handle events
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
@@ -35,12 +40,16 @@ int main (int argc, char **argv)
 
             // Update game state
             for (int i = 0; i < GAME_OBJECTS; i++) {
+                printf("Updating game state on event for object #%d...\n", i);
                 objects[i].update(&(objects[i]), &event);
+                printf("Updating game state on event for object #%d... done\n", i);
             }
         }
+        puts("Handling events... done");
 
         // Update game state
         for (int i = 0; i < GAME_OBJECTS; i++) {
+            printf("Updating game state for object #%d...\n", i);
             objects[i].update(&(objects[i]), NULL);
         }
 

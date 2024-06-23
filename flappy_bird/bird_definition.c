@@ -10,7 +10,7 @@ void bird_update(GameObject* self, SDL_Event* event) {
         self->velocity_y += GRAVITY;
         self->rect.y += self->velocity_y;
     } else if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_SPACE) {
-        self->velocity_y -= 10;
+        self->velocity_y -= 6;
     }
 }
 
