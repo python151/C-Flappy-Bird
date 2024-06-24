@@ -18,6 +18,7 @@ void bird_update(GameObject* self, SDL_Event* event, GameState* state) {
         self->rect.y += birdData->velocity_y;
     } else if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_SPACE) {
         birdData->velocity_y -= 6;
+        state->score+=1;
     }
 }
 
@@ -25,7 +26,7 @@ GameObject* create_bird(SDL_Renderer* renderer) {
     SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 50, 50);
 
     SDL_Rect r;
-    r.x = 0;
+    r.x = 30;
     r.y = (HEIGHT/2) - 25;
     r.w = 35;
     r.h = 35;

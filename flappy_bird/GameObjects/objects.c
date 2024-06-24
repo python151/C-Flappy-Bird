@@ -1,6 +1,7 @@
 #include "../constants_and_includes.h"
 #include "./bird_definition.c"
 #include "./map_definition.c"
+#include "./score_board.c"
 
 
 GameObject* initialize_game_objects(SDL_Renderer* renderer, GameState* state) {
@@ -20,6 +21,9 @@ GameObject* initialize_game_objects(SDL_Renderer* renderer, GameState* state) {
     }
     free(map_objects);
     puts("map assigned...");
+
+    GameObject* scoreboard = create_scoreboard(renderer);
+    memcpy(&objects[GAME_OBJECTS-1], scoreboard, sizeof(GameObject));
     
     return objects;
 }

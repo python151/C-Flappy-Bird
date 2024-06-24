@@ -2,6 +2,7 @@
 #define AB2D4E8E_1546_45C2_A416_547CFB899AAF
 typedef struct {
     int* pipe_locations;
+    int score;
     SDL_Renderer* renderer;
 } GameState;
 

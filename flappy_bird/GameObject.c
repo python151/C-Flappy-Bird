@@ -15,3 +15,7 @@ typedef struct {
     GameObject* other_pipe;
     bool is_top;
 } PipeData;
+
+typedef struct {
+    int displayed_score;
+} ScoreBoardData;
