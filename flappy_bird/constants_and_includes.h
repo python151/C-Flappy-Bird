@@ -17,7 +17,7 @@
 #define HEIGHT 600
 #define NUMBER_OF_PIPES 32
 #define PIPE_WIDTH 50
-#define GAME_OBJECTS (5 + 2*NUMBER_OF_PIPES)
+#define GAME_OBJECTS (5 + 3*NUMBER_OF_PIPES)
 #define PIXEL_PER_METER .5
 #define FPS 60
 #define FRAME_DELAY (1000 / FPS)

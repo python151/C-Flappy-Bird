@@ -1,8 +1,14 @@
 #include "../constants_and_includes.h"
 
 void bird_collide(GameObject* self, GameObject* other, GameState* state) {
-    self->rect.x = 0;
-    self->rect.y = (HEIGHT/2) - 25;
+    // No action if this is a reward pipe
+    //RewardPipeColliderData* reward_data = (RewardPipeColliderData*) other->special_ptr;
+    puts("bird collide called");
+    if (other->type_signature != NULL 
+        && strcmp(other->type_signature, "reward_pipe") == 0) {
+            return;
+        }
+    state->bird_dead = true;
 }
 
 void bird_update(GameObject* self, SDL_Event* event, GameState* state) {
@@ -18,7 +24,6 @@ void bird_update(GameObject* self, SDL_Event* event, GameState* state) {
         self->rect.y += birdData->velocity_y;
     } else if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_SPACE) {
         birdData->velocity_y -= 6;
-        state->score+=1;
     }
 }
 
@@ -31,12 +36,10 @@ GameObject* create_bird(SDL_Renderer* renderer) {
     r.w = 35;
     r.h = 35;
 
-    GameObject* object1 = malloc(sizeof(GameObject));
-    object1->rect = r;
-    object1->texture = texture;
-    object1->update = &bird_update;
-    object1->handle_collision = &bird_collide;
-    object1->special_ptr = malloc(sizeof(BirdData));
+    GameObject* object1 = create_game_object(r, texture, &bird_update, &bird_collide, strdup("bird"), malloc(sizeof(BirdData))); 
+    BirdData* ptr = (BirdData*) object1->special_ptr;
+    ptr->velocity_x = 0;
+    ptr->velocity_y = 0;
 
     return object1;
 }

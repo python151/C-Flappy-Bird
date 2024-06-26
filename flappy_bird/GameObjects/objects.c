@@ -4,26 +4,17 @@
 #include "./score_board.c"
 
 
-GameObject* initialize_game_objects(SDL_Renderer* renderer, GameState* state) {
+void initialize_game_objects(GameObject** objects, SDL_Renderer* renderer, GameState* state) {
+    puts("creating bird");
     GameObject* bird = create_bird(renderer);
-    
-    GameObject* objects = malloc(GAME_OBJECTS*sizeof(GameObject));
-    memcpy(&objects[0], bird, sizeof(GameObject));
-    free(bird);
+    objects[0] = bird;
     
     puts("creating map...");
-    GameObject* map_objects = create_map(renderer, state);
-    puts("map created...");
-    for (int i = 1; i < GAME_OBJECTS; i++) {
-        printf("assigning map object #%d...\n", i);
-        memcpy(&objects[i], &map_objects[i-1], sizeof(GameObject));
-        printf("assigning map object #%d... done\n", i);
-    }
-    free(map_objects);
+    create_map(objects, 1, GAME_OBJECTS-2, renderer, state);
     puts("map assigned...");
 
+    puts("creating scoreboard");
     GameObject* scoreboard = create_scoreboard(renderer);
-    memcpy(&objects[GAME_OBJECTS-1], scoreboard, sizeof(GameObject));
-    
-    return objects;
+    objects[GAME_OBJECTS-1] = scoreboard;
+    puts("scoreboard assigned");
 }

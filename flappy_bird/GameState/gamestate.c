@@ -3,6 +3,7 @@
 typedef struct {
     int* pipe_locations;
     int score;
+    bool bird_dead;
     SDL_Renderer* renderer;
 } GameState;
 
